@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Smart Library Management System</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--side:#0e2b26;--ink:#15211e;--pri:#12695d;--pri2:#e1f0ec;--acc:#d99a2b;--bg:#f2f4f1;--card:#fff;--line:#e0e5df;--mut:#66756f;--red:#b93a2e;--red2:#fbe9e6;--grn:#1a7a4c;--grn2:#e2f4ea;--amb:#8a5a00;--amb2:#fbf0d6;--btn:#fff;--hov:#f8faf7}
+html[data-theme=dark]{--side:#08100e;--ink:#e6efeb;--pri:#3fc1a9;--pri2:#173630;--bg:#0b1513;--card:#12211e;--line:#22362f;--mut:#93a7a0;--red:#ff8a80;--red2:#3a1f24;--grn:#5fd39b;--grn2:#16302a;--amb:#f2c15b;--amb2:#382d12;--btn:#12211e;--hov:#182a26;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 'DM Sans',system-ui,sans-serif}
+h2,.bt,.bar h1,.stat b,.amt{font-family:'Bricolage Grotesque','DM Sans',system-ui,sans-serif}
+.app{display:grid;grid-template-columns:240px 1fr;min-height:100vh}
+aside{position:sticky;top:0;height:100vh;background:var(--side);color:#fff;padding:20px 14px;display:flex;flex-direction:column;gap:18px}
+.brand{display:flex;gap:12px;align-items:flex-end;padding:0 6px}
+.bt{font-weight:800;font-size:16px;line-height:1.2}.brand small{color:#8fb0a7;font-size:12px}
+.spines{display:inline-flex;align-items:flex-end;gap:3px;height:30px;flex:none}
+.spines i{width:8px;border-radius:2px;display:block}
+.spines i:nth-child(1){height:22px;background:#d99a2b}.spines i:nth-child(2){height:30px;background:#4fb7a3}.spines i:nth-child(3){height:18px;background:#d0604e}
+nav{display:flex;flex-direction:column;gap:2px;flex:1;overflow-y:auto}
+nav button{background:none;border:0;border-left:3px solid transparent;color:#b3c8c1;text-align:left;padding:10px 12px;border-radius:0 9px 9px 0;font:500 14.5px inherit;cursor:pointer;white-space:nowrap}
+nav button:hover{color:#fff;background:rgba(255,255,255,.05)}
+nav button.on{color:#fff;background:rgba(255,255,255,.1);border-left-color:var(--acc)}
+.foot{display:flex;flex-direction:column;gap:8px}.foot small{color:#8fb0a7;padding:0 6px;font-size:13px}
+aside .b{width:100%;background:rgba(255,255,255,.07);color:#e3eeea;border:1px solid rgba(255,255,255,.14)}
+aside .b:hover{background:rgba(255,255,255,.14);filter:none}
+.bar{display:flex;align-items:baseline;justify-content:space-between;gap:10px;max-width:1120px;margin:0 auto;padding:26px 30px 0}
+.bar h1{margin:0;font-size:28px;font-weight:800;letter-spacing:-.3px}.bar span{color:var(--mut);font-size:13px}
+main{max-width:1120px;margin:0 auto;padding:16px 30px 70px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;margin-bottom:18px;box-shadow:0 1px 2px rgba(14,43,38,.05)}
+h2{font-size:17px;font-weight:700;margin:0 0 12px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:18px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 16px 16px 22px;position:relative;overflow:hidden}
+.stat:before{content:'';position:absolute;left:0;top:14px;bottom:14px;width:5px;border-radius:0 4px 4px 0;background:#4fb7a3}
+.stat:nth-child(3n+2):before{background:var(--acc)}.stat:nth-child(3n+3):before{background:#d0604e}.stat.w:before{background:var(--red)}
+.stat b{display:block;font-size:32px;font-weight:800;line-height:1.1}.stat span{color:var(--mut);font-size:13px}.stat.w b{color:var(--red)}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+input,select{font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:10px;flex:1 1 150px;min-width:0;background:var(--card);color:var(--ink)}
+input:focus,select:focus{border-color:var(--pri);outline:3px solid var(--pri2)}
+label.hint{display:block}label.hint input{margin-top:4px;width:100%}
+textarea{width:100%;min-height:90px;font:13px ui-monospace,Consolas,monospace;padding:10px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink)}
+.b{background:var(--pri);color:#fff;border:1px solid var(--pri);border-radius:10px;padding:10px 17px;font:700 14px inherit;cursor:pointer}
+.b:hover{filter:brightness(.93)}
+.b.alt{background:var(--btn);color:var(--ink);border-color:var(--line)}.b.gold{background:var(--amb2);color:var(--amb);border-color:var(--amb2)}
+html[data-theme=dark] .b:not(.alt):not(.gold){color:#08100e}
+.sm{background:var(--pri2);color:var(--pri);border:0;border-radius:7px;padding:5px 11px;font:700 12px inherit;cursor:pointer;margin:1px 2px}
+.sm.r{background:var(--red2);color:var(--red)}
+button:focus-visible{outline:3px solid var(--acc);outline-offset:1px}
+.scroll{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:14px}
+th{text-align:left;color:var(--mut);font-weight:700;font-size:12.5px;padding:8px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr:hover td{background:var(--hov)}
+.tag{display:inline-block;padding:2px 10px;border-radius:99px;font-size:12px;font-weight:700}
+.t-ok{background:var(--grn2);color:var(--grn)}.t-bad{background:var(--red2);color:var(--red)}.t-wait{background:var(--amb2);color:var(--amb)}
+.empty,.hint{color:var(--mut);font-size:13px;margin:6px 0}
+video{width:100%;max-width:360px;border-radius:12px;background:#000;display:none}
+#toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:11px 18px;border-radius:10px;display:none;z-index:9;max-width:90%;font-size:14px}
+#toast.err{background:var(--red);color:#fff}
+#modal,#pmodal{position:fixed;inset:0;background:rgba(8,16,14,.62);display:none;align-items:center;justify-content:center;z-index:8;padding:16px}
+#modal .box,#pmodal .box{background:var(--card);color:var(--ink);border-radius:16px;padding:24px;text-align:center;width:100%;max-width:380px}
+#pmodal .box{text-align:left}
+#qr{display:flex;justify-content:center;margin:12px 0}
+.pm-opt{display:flex;gap:10px;align-items:center;border:1px solid var(--line);border-radius:10px;padding:11px 12px;margin-bottom:8px;cursor:pointer;font-weight:600}
+.pm-opt input{flex:none;width:auto}.pm-opt:has(input:checked){border-color:var(--pri);background:var(--pri2)}
+.amt{font-size:32px;font-weight:800;margin:2px 0 12px}
+.login{max-width:410px;margin:8vh auto 0;padding:30px}
+.login .row select,.login .row input{flex:1 1 100%}
+.creds{background:var(--bg);border-radius:10px;padding:10px 12px;margin-top:14px;font-size:13px;color:var(--mut)}
+pre.err{color:var(--red);white-space:pre-wrap}
+body.anon{background:radial-gradient(circle at 20% 10%,#1b4a41,var(--side) 60%)}
+body.anon .app{display:block}body.anon aside,body.anon .bar{display:none}
+@media(max-width:820px){.app{display:block}aside{position:static;height:auto;padding:14px 12px 8px;gap:10px}
+nav{flex-direction:row;overflow-x:auto;flex:none}nav button{border-left:0;border-bottom:3px solid transparent;border-radius:8px 8px 0 0}nav button.on{border-bottom-color:var(--acc)}
+.foot{flex-direction:row;align-items:center}.foot small{flex:1}aside .b{width:auto;padding:7px 12px}
+.bar{padding:18px 16px 0}.bar h1{font-size:23px}main{padding:12px 14px 60px}.card{padding:16px}}
+</style></head>
+<body>
+<div class="app">
+<aside><div class="brand"><span class="spines"><i></i><i></i><i></i></span><div><div class="bt" id="lib">Smart Library</div><small>Library desk</small></div></div>
+<nav id="nav"></nav>
+<div class="foot"><small id="who">Please sign in</small><button class="b alt" id="tm" onclick="toggleTheme()" aria-label="Switch between light and dark mode">Dark mode</button><button class="b gold" id="out" style="display:none" onclick="logout()">Sign out</button></div></aside>
+<div><div class="bar"><h1 id="pt"></h1><span id="dt"></span></div><main id="view"></main></div></div>
+<div id="modal" onclick="if(event.target===this)this.style.display='none'"><div class="box"><h2 id="qrt"></h2><div id="qr"></div><p class="hint">Long-press or right-click to save the QR code.</p><button class="b" onclick="$('#modal').style.display='none'">Close</button></div></div>
+<div id="pmodal" onclick="if(event.target===this)closePay()"><div class="box" id="pbox"></div></div>
+<div id="toast"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jsQR/1.4.0/jsQR.min.js"></script>
+<script>
+const $=s=>document.querySelector(s);
+const esc=v=>String(v==null?'':v).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const KEY='smart_library_full_v1';let db,me=null,cur='',stream=null,scanning=false,last='';
+function toast(t,e){const x=$('#toast');x.textContent=t;x.className=e?'err':'';x.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>x.style.display='none',3000)}
+function q(s,p){const st=db.prepare(s);st.bind(p||[]);const r=[];while(st.step())r.push(st.getAsObject());st.free();return r}
+function run(s,p){db.run(s,p||[]);save()}
+function save(){const d=db.export();let s='';for(let i=0;i<d.length;i+=8192)s+=String.fromCharCode.apply(null,d.subarray(i,i+8192));try{localStorage.setItem(KEY,btoa(s))}catch(e){}}
+const cfgS=k=>q('SELECT v FROM settings WHERE k=?',[k])[0].v;
+const cfgOpt=k=>{const r=q('SELECT v FROM settings WHERE k=?',[k])[0];return r?String(r.v):''};
+const cfg=k=>+q('SELECT v FROM settings WHERE k=?',[k])[0].v;
+const F="CASE WHEN i.return_date IS NULL THEN MAX(0,CAST(julianday('now')-julianday(i.due_date) AS INTEGER))*(SELECT v FROM settings WHERE k='fine_per_day') ELSE i.fine END";
+function seed(SQL){db=new SQL.Database();
+db.run(`CREATE TABLE settings(k TEXT PRIMARY KEY,v TEXT);
+CREATE TABLE categories(id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT);
+CREATE TABLE books(id INTEGER PRIMARY KEY AUTOINCREMENT,isbn TEXT UNIQUE,title TEXT,author TEXT,category_id INT,total_copies INT,location TEXT,cover TEXT);
+CREATE TABLE students(id INTEGER PRIMARY KEY AUTOINCREMENT,student_id TEXT UNIQUE,full_name TEXT,email TEXT,department TEXT,password TEXT);
+CREATE TABLE issues(id INTEGER PRIMARY KEY AUTOINCREMENT,book_id INT,student_id INT,issue_date TEXT,due_date TEXT,return_date TEXT,fine INT DEFAULT 0,fine_paid INT DEFAULT 0);
+CREATE TABLE requests(id INTEGER PRIMARY KEY AUTOINCREMENT,book_id INT,student_id INT,status TEXT DEFAULT 'pending',req_date TEXT);
+CREATE TABLE ratings(id INTEGER PRIMARY KEY AUTOINCREMENT,book_id INT,student_id INT,rating INT,review TEXT);`);
+[['fine_per_day',50],['max_issue_days',14],['max_books_per_student',5],['admin_password','admin123'],['library_name','Smart Library Management System']].forEach(s=>db.run('INSERT INTO settings VALUES(?,?)',s));
+['Fiction','Science','Technology','History','Mathematics','Literature','Arts','Business'].forEach(c=>db.run('INSERT INTO categories(name) VALUES(?)',[c]));
+[['978-0061120084','To Kill a Mockingbird','Harper Lee',1,5,'A-101'],['978-0451524935','1984','George Orwell',1,3,'A-102'],['978-0141439518','Pride and Prejudice','Jane Austen',1,4,'A-103'],['978-0321125217','Domain-Driven Design','Eric Evans',3,2,'B-201'],['978-0596517748','JavaScript: The Good Parts','Douglas Crockford',3,3,'B-202'],['978-0201633610','Design Patterns','Gang of Four',3,2,'B-203'],['978-0465050659','The Selfish Gene','Richard Dawkins',2,3,'C-301'],['978-0307271071','A Brief History of Time','Stephen Hawking',2,4,'C-302'],['978-0060935467','The Alchemist','Paulo Coelho',1,5,'A-104']]
+ .forEach(b=>db.run('INSERT INTO books(isbn,title,author,category_id,total_copies,location) VALUES(?,?,?,?,?,?)',b));
+[['STU001','John Smith','john.smith@student.edu','Computer Science'],['STU002','Emily Johnson','emily.j@student.edu','Mathematics'],['STU003','Michael Brown','michael.b@student.edu','Physics']]
+ .forEach(s=>db.run('INSERT INTO students(student_id,full_name,email,department,password) VALUES(?,?,?,?,?)',s.concat('student123')));
+db.run(`INSERT INTO issues(book_id,student_id,issue_date,due_date,return_date,fine) VALUES
+(1,1,date('now','-40 days'),date('now','-26 days'),date('now','-30 days'),200),
+(2,1,date('now','-20 days'),date('now','-6 days'),NULL,0),
+(3,2,date('now','-3 days'),date('now','11 days'),NULL,0),
+(5,3,date('now','-2 days'),date('now','12 days'),NULL,0)`);
+db.run("INSERT INTO ratings(book_id,student_id,rating,review) VALUES(1,1,5,'A timeless classic.'),(1,2,4,'Beautiful storytelling.'),(2,1,5,'Prophetic and unsettling.'),(5,3,5,'Best JavaScript book ever!')");
+db.run("INSERT INTO requests(book_id,student_id,req_date) VALUES(4,2,date('now'))");save()}
+function resetDB(){if(confirm('Delete all data and restore sample data?')){localStorage.removeItem(KEY);location.reload()}}
+
+const cell=v=>{const s=esc(v),m={paid:'t-ok',approved:'t-ok',unpaid:'t-bad',rejected:'t-bad',cancelled:'t-bad',pending:'t-wait'}[String(v).toLowerCase()];return m?`<span class="tag ${m}">${s}</span>`:s};
+function tbl(rows,act){if(!rows.length)return '<p class="empty">No records found.</p>';const k=Object.keys(rows[0]);
+return '<div class="scroll"><table><tr>'+k.map(x=>'<th>'+esc(x)+'</th>').join('')+(act?'<th></th>':'')+'</tr>'+rows.map(r=>'<tr>'+k.map(x=>'<td>'+cell(r[x])+'</td>').join('')+(act?'<td>'+act(r)+'</td>':'')+'</tr>').join('')+'</table></div>'}
+const btn=(t,f,c)=>`<button class="sm ${c||''}" onclick="${f}">${t}</button>`;
+const AV="b.total_copies-(SELECT COUNT(*) FROM issues x WHERE x.book_id=b.id AND x.return_date IS NULL)";
+
+/* ---------- login ---------- */
+function loginPage(){document.body.classList.add('anon');$('#nav').innerHTML='';$('#out').style.display='none';$('#who').textContent='Please sign in';
+$('#view').innerHTML=`<div class="card login"><span class="spines"><i></i><i></i><i></i></span><h2 style="font-size:26px;margin:14px 0 4px">Welcome back</h2><p class="hint" style="margin:0 0 16px">Sign in to manage or browse the library.</p><div class="row"><select id="lr"><option value="admin">Admin</option><option value="student">Student</option></select></div>
+<div class="row"><input id="lu" placeholder="Username or Student ID" value="admin"><input id="lp" type="password" placeholder="Password" value="admin123"></div>
+<button class="b" style="width:100%" onclick="login()">Sign in</button><div class="creds">Demo admin: admin / admin123<br>Demo student: STU001 / student123</div></div>`;
+$('#lr').onchange=e=>{$('#lu').value=e.target.value=='admin'?'admin':'STU001';$('#lp').value=e.target.value=='admin'?'admin123':'student123'}}
+function login(){const r=$('#lr').value,u=$('#lu').value.trim(),p=$('#lp').value;
+if(r=='admin'){if(u=='admin'&&p==cfgS('admin_password'))me={role:'admin',name:'System Administrator'};else return toast('Wrong admin username or password.',1)}
+else{const s=q('SELECT * FROM students WHERE student_id=? AND password=?',[u.toUpperCase(),p])[0];if(!s)return toast('Wrong student ID or password.',1);me={role:'student',name:s.full_name,id:s.id}}
+document.body.classList.remove('anon');$('#who').textContent=me.name+' ('+me.role+')';$('#out').style.display='';
+const tabs=me.role=='admin'?{dash:'Dashboard',books:'Books',students:'Students',issue:'Issue & Return',requests:'Requests',fines:'Fines',reviews:'Reviews',reports:'Reports',settings:'Settings',profile:'Profile',sql:'SQL Console'}:{sdash:'Home',browse:'Browse Books',mybooks:'My Books',myreq:'My Requests',myfines:'Fines & Payments',profile:'Profile'};
+$('#nav').innerHTML=Object.entries(tabs).map(([k,v])=>`<button data-v="${k}">${v}</button>`).join('');go(Object.keys(tabs)[0])}
+function logout(){stopScan();me=null;loginPage()}
+$('#nav').addEventListener('click',e=>{const b=e.target.closest('button');if(b)go(b.dataset.v)});
+function go(v){cur=v;stopScan();{const nb=document.querySelector('nav button[data-v="'+v+'"]');$('#pt').textContent=nb?nb.textContent:'';$('#dt').textContent=new Date().toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'long'})}document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.v==v));$('#view').innerHTML=V[v]();if(v=='sql')runSQL()}
+const refresh=()=>go(cur);
+
+/* ---------- views ---------- */
+const V={
+dash(){const n=t=>q('SELECT COUNT(*) c FROM '+t)[0].c;
+const out=q('SELECT COUNT(*) c FROM issues WHERE return_date IS NULL')[0].c,od=q("SELECT COUNT(*) c FROM issues WHERE return_date IS NULL AND due_date<date('now')")[0].c,pf=q(`SELECT COALESCE(SUM(${F}),0) t FROM issues i WHERE fine_paid=0`)[0].t;
+return `<div class="stats">${[['Book titles',n('books')],['Students',n('students')],['Issued now',out],['Overdue',od,1],['Unpaid fines (₹)',pf,1],['Pending requests',q("SELECT COUNT(*) c FROM requests WHERE status='pending'")[0].c]].map(s=>`<div class="stat${s[2]?' w':''}"><b>${s[1]}</b><span>${s[0]}</span></div>`).join('')}</div>
+<div class="card"><h2>Overdue books</h2>${tbl(q(`SELECT b.title Book,s.full_name Student,i.due_date Due,${F} "Fine (₹)" FROM issues i JOIN books b ON b.id=i.book_id JOIN students s ON s.id=i.student_id WHERE i.return_date IS NULL AND i.due_date<date('now')`))}</div>`},
+books(){const s='%'+(($('#bs')||{}).value||'')+'%';
+return `<div class="card"><h2>Add a book</h2><div class="row"><input id="bi" placeholder="ISBN"><input id="bt" placeholder="Title"><input id="ba" placeholder="Author"></div>
+<div class="row"><select id="bcat">${q('SELECT * FROM categories').map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join('')}</select><input id="bn" type="number" min="1" value="1"><input id="bl" placeholder="Shelf (A-101)"><input id="bcv" type="file" accept="image/*" title="Cover image"><button class="b" onclick="addBook()">Add book</button></div></div>
+<div class="card"><h2>All books</h2><div class="row"><input id="bs" placeholder="Search title, author or ISBN" oninput="keep('books')" value="${esc(s.replace(/%/g,''))}"></div>
+${tbl(q(`SELECT b.id ID,b.isbn ISBN,b.title Title,b.author Author,c.name Category,b.location Shelf,b.total_copies Copies,${AV} Available FROM books b LEFT JOIN categories c ON c.id=b.category_id WHERE b.title LIKE ? OR b.author LIKE ? OR b.isbn LIKE ? ORDER BY b.id`,[s,s,s]),r=>coverImg(r.ID)+btn('QR',`showQR('${r.ISBN}')`)+btn('Delete',`delBook(${r.ID})`,'r'))}</div>`},
+students(){return `<div class="card"><h2>Add a student</h2><div class="row"><input id="sn" placeholder="Full name"><input id="se" placeholder="Email"><input id="sd" placeholder="Department"><button class="b" onclick="addStudent()">Add student</button></div><p class="hint">New students sign in with their Student ID and password student123.</p></div>
+<div class="card"><h2>All students</h2>${tbl(q(`SELECT s.student_id "Student ID",s.full_name Name,s.email Email,s.department Department,(SELECT COUNT(*) FROM issues i WHERE i.student_id=s.id AND i.return_date IS NULL) "Books held" FROM students s`),r=>btn('QR',`showQR('${r['Student ID']}')`))}</div>`},
+issue(){return `<div class="card"><h2>Issue or return a book</h2><div class="row"><input id="is" placeholder="Student ID (STU001)"><input id="ib" placeholder="Book ISBN"></div>
+<div class="row"><button class="b" onclick="issueBook()">Issue book</button><button class="b alt" onclick="returnByIsbn()">Return book</button><button class="b gold" onclick="startScan()">Scan QR</button><button class="b alt" onclick="stopScan()">Stop camera</button></div><video id="cam" playsinline muted></video>
+<p class="hint">Loan period ${cfg('max_issue_days')} days, up to ${cfg('max_books_per_student')} books per student, fine ₹${cfg('fine_per_day')} per day.</p></div>
+<div class="card"><h2>Books currently issued</h2>${tbl(q(`SELECT i.id Issue,b.isbn ISBN,b.title Title,s.full_name Student,i.issue_date Issued,i.due_date Due,${F} "Fine (₹)" FROM issues i JOIN books b ON b.id=i.book_id JOIN students s ON s.id=i.student_id WHERE i.return_date IS NULL ORDER BY i.due_date`),r=>btn('Return',`returnIssue(${r.Issue})`))}</div>`},
+requests(){return `<div class="card"><h2>Book requests</h2>${tbl(q(`SELECT r.id ID,b.title Book,s.full_name Student,r.req_date Date,r.status Status FROM requests r JOIN books b ON b.id=r.book_id JOIN students s ON s.id=r.student_id ORDER BY r.id DESC`),r=>r.Status=='pending'?btn('Approve',`approve(${r.ID})`)+btn('Reject',`reject(${r.ID})`,'r'):'')}</div>`},
+fines(){return `<div class="card"><h2>Fines</h2>${tbl(q(`SELECT i.id Issue,s.full_name Student,b.title Book,i.due_date Due,i.return_date Returned,${F} "Fine (₹)",CASE WHEN i.fine_paid THEN 'Paid' ELSE 'Unpaid' END Status FROM issues i JOIN books b ON b.id=i.book_id JOIN students s ON s.id=i.student_id WHERE ${F}>0 ORDER BY i.fine_paid,i.id DESC`),r=>r.Status=='Unpaid'&&r.Returned?btn('Collect cash',`payFine(${r.Issue},'cash')`)+btn('Waive',`payFine(${r.Issue},'waived')`,'r'):r.Status=='Unpaid'?'<span class="hint">Return first</span>':'')}</div>`},
+reviews(){return `<div class="card"><h2>Ratings and reviews</h2>${tbl(q(`SELECT b.title Book,s.full_name Student,'★'||r.rating Rating,r.review Review FROM ratings r JOIN books b ON b.id=r.book_id JOIN students s ON s.id=r.student_id ORDER BY r.id DESC`))}</div>`},
+sql(){return `<div class="card"><h2>SQL Console</h2><p class="hint">Tables: books, students, issues, requests, ratings, categories, settings.</p>
+<textarea id="sqlbox">SELECT b.title, COUNT(*) AS times_issued FROM issues i JOIN books b ON b.id=i.book_id GROUP BY b.id ORDER BY times_issued DESC;</textarea>
+<div class="row" style="margin-top:8px"><button class="b" onclick="runSQL()">Run query</button><button class="b alt" onclick="resetDB()">Reset sample data</button></div><div id="sqlout"></div></div>`},
+browse(){const s='%'+(($('#bs')||{}).value||'')+'%';
+return `<div class="card"><h2>Browse books</h2><div class="row"><input id="bs" placeholder="Search title, author or category" oninput="keep('browse')" value="${esc(s.replace(/%/g,''))}"></div>
+${tbl(q(`SELECT b.id ID,b.title Title,b.author Author,c.name Category,b.location Shelf,${AV} Available,COALESCE(ROUND((SELECT AVG(rating) FROM ratings r WHERE r.book_id=b.id),1),'-') Rating FROM books b LEFT JOIN categories c ON c.id=b.category_id WHERE b.title LIKE ? OR b.author LIKE ? OR c.name LIKE ? ORDER BY b.title`,[s,s,s]),r=>coverImg(r.ID)+btn('Request',`request(${r.ID})`)+btn('Rate',`rate(${r.ID})`)+btn('Reviews',`showReviews(${r.ID})`))}</div>`},
+mine(){return `<div class="card"><h2>My books and fines</h2><div class="row"><button class="b alt" onclick="exportCSV()">Download my history (CSV)</button></div>${tbl(q(`SELECT i.id Issue,b.title Book,i.issue_date Issued,i.due_date Due,COALESCE(i.return_date,'Not returned') Returned,${F} "Fine (₹)",CASE WHEN i.fine_paid THEN 'Paid' WHEN ${F}>0 THEN 'Unpaid' ELSE '-' END Fine_status FROM issues i JOIN books b ON b.id=i.book_id WHERE i.student_id=? ORDER BY i.id DESC`,[me.id]),r=>r.Fine_status=='Unpaid'?btn('Pay fine',`openPay(${r.Issue})`):'')}</div>
+<div class="card"><h2>My requests</h2>${tbl(q(`SELECT b.title Book,r.req_date Date,r.status Status FROM requests r JOIN books b ON b.id=r.book_id WHERE r.student_id=? ORDER BY r.id DESC`,[me.id]))}</div>`}};
+function keep(v){const el=$('#bs'),val=el.value;go(v);const n=$('#bs');n.value=val;n.focus();n.setSelectionRange(val.length,val.length)}
+
+/* ---------- actions ---------- */
+async function addBook(){const isbn=$('#bi').value.trim(),t=$('#bt').value.trim(),a=$('#ba').value.trim();if(!isbn||!t||!a)return toast('Enter ISBN, title and author.',1);
+const cv=await readCover($('#bcv').files[0]);
+try{run('INSERT INTO books(isbn,title,author,category_id,total_copies,location,cover) VALUES(?,?,?,?,?,?,?)',[isbn,t,a,$('#bcat').value,+$('#bn').value||1,$('#bl').value.trim(),cv]);toast('Book added.');refresh()}catch(e){toast('This ISBN already exists.',1)}}
+function readCover(f){return new Promise(res=>{if(!f)return res(null);const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const k=Math.min(1,150/im.height),c=document.createElement('canvas');c.width=im.width*k;c.height=im.height*k;c.getContext('2d').drawImage(im,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',.7))};im.onerror=()=>res(null);im.src=r.result};r.onerror=()=>res(null);r.readAsDataURL(f)})}
+const coverImg=id=>{const c=q('SELECT cover FROM books WHERE id=?',[id])[0];return c&&c.cover?`<img src="${c.cover}" alt="Book cover" style="height:44px;border-radius:4px;vertical-align:middle;margin-right:6px">`:''};
+function delBook(id){if(q('SELECT COUNT(*) c FROM issues WHERE book_id=? AND return_date IS NULL',[id])[0].c)return toast('This book is issued. Return it first.',1);if(confirm('Delete this book?')){run('DELETE FROM books WHERE id=?',[id]);refresh()}}
+function addStudent(){const n=$('#sn').value.trim();if(!n)return toast('Enter the student name.',1);
+const id='STU'+String(q('SELECT COALESCE(MAX(id),0)+1 n FROM students')[0].n).padStart(3,'0');run('INSERT INTO students(student_id,full_name,email,department,password) VALUES(?,?,?,?,?)',[id,n,$('#se').value.trim(),$('#sd').value.trim(),'student123']);toast('Added '+n+' as '+id+'.');refresh()}
+function doIssue(bid,sid){const b=q('SELECT b.*,'+AV+' av FROM books b WHERE b.id=?',[bid])[0];if(!b||b.av<1)return toast('No copies available.',1);
+if(q('SELECT COUNT(*) c FROM issues WHERE student_id=? AND return_date IS NULL',[sid])[0].c>=cfg('max_books_per_student'))return toast('Student reached the book limit.',1);
+run("INSERT INTO issues(book_id,student_id,issue_date,due_date) VALUES(?,?,date('now'),date('now','+'||?||' days'))",[bid,sid,cfg('max_issue_days')]);return true}
+function issueBook(){const s=q('SELECT * FROM students WHERE student_id=?',[$('#is').value.trim().toUpperCase()])[0],b=q('SELECT * FROM books WHERE isbn=?',[$('#ib').value.trim()])[0];
+if(!s||!b)return toast('Student ID or ISBN not found.',1);if(doIssue(b.id,s.id)){toast('Issued "'+b.title+'" to '+s.full_name+'.');refresh()}}
+function returnIssue(id){const f=q(`SELECT ${F} f FROM issues i WHERE i.id=?`,[id])[0].f;run("UPDATE issues SET return_date=date('now'),fine=? WHERE id=?",[f,id]);toast(f?'Returned. Fine ₹'+f+' recorded.':'Book returned.');refresh()}
+function returnByIsbn(){const r=q('SELECT i.id FROM issues i JOIN books b ON b.id=i.book_id WHERE b.isbn=? AND i.return_date IS NULL LIMIT 1',[$('#ib').value.trim()])[0];r?returnIssue(r.id):toast('No issued copy for this ISBN.',1)}
+function approve(id){const r=q('SELECT * FROM requests WHERE id=?',[id])[0];if(doIssue(r.book_id,r.student_id)){run("UPDATE requests SET status='approved' WHERE id=?",[id]);toast('Request approved and book issued.');refresh()}}
+function reject(id){run("UPDATE requests SET status='rejected' WHERE id=?",[id]);refresh()}
+const PAYINS="INSERT INTO payments(issue_id,student_id,amount,method,txn,paid_at) VALUES(?,(SELECT student_id FROM issues WHERE id=?),?,?,?,datetime('now'))";
+function payFine(id,m){const f=q(`SELECT ${F} f FROM issues i WHERE i.id=?`,[id])[0].f,w=m=='waived';
+db.run('UPDATE issues SET fine_paid=1 WHERE id=?',[id]);db.run(PAYINS,[id,id,w?0:f,m,(w?'WAIVED-':'CASH-')+Date.now().toString().slice(-6)]);save();toast(w?'Fine waived.':'Cash payment recorded.');refresh()}
+function openPay(id){const RZ=cfgOpt('razorpay_key'),r=q(`SELECT ${F} f,b.title t,i.return_date d FROM issues i JOIN books b ON b.id=i.book_id WHERE i.id=?`,[id])[0];
+if(!r||!r.f)return toast('No fine to pay.',1);if(!r.d)return toast('Return the book to the librarian first, then pay the fine.',1);
+$('#pbox').innerHTML=`<h2>Pay fine</h2><p class="hint" style="margin:0">${esc(r.t)}</p><div class="amt">₹${r.f}</div>
+${RZ?'<label class="pm-opt"><input type="radio" name="pmth" value="Razorpay" checked>Razorpay (UPI, cards, net banking)</label>':''}<label class="pm-opt"><input type="radio" name="pmth" value="UPI"${RZ?'':' checked'}>Demo: UPI</label><label class="pm-opt"><input type="radio" name="pmth" value="Card">Demo: Card</label><label class="pm-opt"><input type="radio" name="pmth" value="Net banking">Demo: Net banking</label>
+<p class="hint">${RZ?'Razorpay opens its own secure checkout. Use a test key while practising. The Demo options never move money.':'Demo payment only. No real money moves and no card details are needed.'}</p>
+<div class="row"><button class="b" id="pgo" onclick="confirmPay(${id})">Pay ₹${r.f}</button><button class="b alt" onclick="closePay()">Cancel</button></div>`;$('#pmodal').style.display='flex'}
+function confirmPay(id){const m=(document.querySelector('input[name=pmth]:checked')||{}).value||'UPI';
+if(m=='Razorpay')return rzPay(id);const g=$('#pgo');g.disabled=true;g.textContent='Processing…';setTimeout(()=>finishPay(id,'Demo '+m,'TXN'+Date.now().toString().slice(-8)),1500)}
+function finishPay(id,m,txn){const f=q(`SELECT ${F} f FROM issues i WHERE i.id=?`,[id])[0].f;
+db.run('UPDATE issues SET fine_paid=1,fine=? WHERE id=?',[f,id]);db.run(PAYINS,[id,id,f,m,txn]);save();
+$('#pbox').innerHTML=`<h2>Payment successful</h2><span class="tag t-ok">Paid</span><p>₹${f} paid by ${esc(m)}.<br>Receipt: <b>${esc(txn)}</b></p><button class="b" onclick="closePay();refresh()">Done</button>`;$('#pmodal').style.display='flex'}
+function rzPay(id){const key=cfgOpt('razorpay_key'),r=q(`SELECT ${F} f,b.title t FROM issues i JOIN books b ON b.id=i.book_id WHERE i.id=?`,[id])[0],s=q('SELECT full_name,email FROM students WHERE id=?',[me.id])[0];
+const go=()=>{const z=new Razorpay({key,amount:Math.round(r.f*100),currency:'INR',name:cfgS('library_name'),description:'Library fine: '+r.t,prefill:{name:s.full_name,email:s.email},theme:{color:'#3d4fd6'},handler:x=>finishPay(id,'Razorpay',x.razorpay_payment_id)});z.on('payment.failed',e=>toast((e.error&&e.error.description)||'Payment failed.',1));closePay();z.open()};
+if(window.Razorpay)return go();const sc=document.createElement('script');sc.src='https://checkout.razorpay.com/v1/checkout.js';sc.onload=go;sc.onerror=()=>toast('Could not load Razorpay. Check your internet.',1);document.head.appendChild(sc)}
+function closePay(){$('#pmodal').style.display='none'}
+function request(bid){if(q("SELECT COUNT(*) c FROM requests WHERE book_id=? AND student_id=? AND status='pending'",[bid,me.id])[0].c)return toast('You already requested this book.',1);
+run("INSERT INTO requests(book_id,student_id,req_date) VALUES(?,?,date('now'))",[bid,me.id]);toast('Request sent to the librarian.')}
+function rate(bid){const r=parseInt(prompt('Rate this book from 1 to 5'));if(!(r>=1&&r<=5))return toast('Enter a number from 1 to 5.',1);
+run('INSERT INTO ratings(book_id,student_id,rating,review) VALUES(?,?,?,?)',[bid,me.id,r,prompt('Write a short review (optional)')||'']);toast('Thanks for your review.');refresh()}
+
+/* ---------- reports, settings, profile, export ---------- */
+V.reports=()=>`<div class="card"><h2>Reports</h2><div class="row"><button class="b" onclick="exportCSV()">Download issue history (CSV)</button></div>
+<h2>Fine summary</h2>${tbl(q(`SELECT COALESCE(SUM(CASE WHEN i.fine_paid=1 THEN i.fine END),0) "Collected (₹)",COALESCE(SUM(CASE WHEN i.fine_paid=0 THEN ${F} END),0) "Unpaid (₹)" FROM issues i`))}</div>
+<div class="card"><h2>Most issued books</h2>${tbl(q('SELECT b.title Book,COUNT(*) Times FROM issues i JOIN books b ON b.id=i.book_id GROUP BY b.id ORDER BY Times DESC LIMIT 5'))}</div>
+<div class="card"><h2>Top borrowers</h2>${tbl(q('SELECT s.full_name Student,COUNT(*) Books FROM issues i JOIN students s ON s.id=i.student_id GROUP BY s.id ORDER BY Books DESC LIMIT 5'))}</div>
+<div class="card"><h2>Issues by category</h2>${tbl(q('SELECT c.name Category,COUNT(i.id) Issues FROM categories c LEFT JOIN books b ON b.category_id=c.id LEFT JOIN issues i ON i.book_id=b.id GROUP BY c.id ORDER BY Issues DESC'))}</div>`;
+V.settings=()=>`<div class="card"><h2>Library settings</h2><div class="row">
+<label class="hint" style="flex:1 1 220px">Library name<input id="s0" value="${esc(cfgS('library_name'))}"></label>
+<label class="hint" style="flex:1 1 140px">Fine per day (₹)<input id="s1" type="number" min="0" value="${cfg('fine_per_day')}"></label>
+<label class="hint" style="flex:1 1 140px">Loan days<input id="s2" type="number" min="1" value="${cfg('max_issue_days')}"></label>
+<label class="hint" style="flex:1 1 140px">Max books per student<input id="s3" type="number" min="1" value="${cfg('max_books_per_student')}"></label>
+<label class="hint" style="flex:1 1 100%">Razorpay Key ID (test keys start with rzp_test_). Paste only the Key ID, never the Key Secret.<input id="s4" value="${esc(cfgOpt('razorpay_key'))}" placeholder="rzp_test_xxxxxxxxxxxxxx"></label></div>
+<button class="b" onclick="saveSettings()">Save settings</button></div>`;
+V.profile=()=>{if(me.role=='admin')return `<div class="card"><h2>Admin profile</h2><p class="hint">Signed in as admin. Change your password below.</p><div class="row"><input id="pc" type="password" placeholder="Current password"><input id="pn" type="password" placeholder="New password (min 6 characters)"><button class="b" onclick="chgAdmin()">Change password</button></div></div>`;
+const s=q('SELECT * FROM students WHERE id=?',[me.id])[0];
+return `<div class="card"><h2>My profile (${esc(s.student_id)})</h2><div class="row"><input id="pn1" value="${esc(s.full_name)}" placeholder="Full name"><input id="pe" value="${esc(s.email)}" placeholder="Email"><input id="pd" value="${esc(s.department)}" placeholder="Department"></div>
+<div class="row"><input id="pw" type="password" placeholder="New password (leave empty to keep)"><button class="b" onclick="saveProfile()">Save profile</button></div><div class="row"><button class="b alt" onclick="showQR('${esc(s.student_id)}')">Show my ID QR code</button></div></div>`};
+function saveSettings(){const n=$('#s0').value.trim();if(!n)return toast('Enter the library name.',1);
+[['library_name',n],['fine_per_day',+$('#s1').value||0],['max_issue_days',+$('#s2').value||14],['max_books_per_student',+$('#s3').value||5]].forEach(x=>db.run('UPDATE settings SET v=? WHERE k=?',[x[1],x[0]]));const rk=$('#s4').value.trim();if(rk&&!/^rzp_(test|live)_/.test(rk))return toast('Razorpay Key ID must start with rzp_test_ or rzp_live_.',1);db.run("INSERT OR REPLACE INTO settings VALUES('razorpay_key',?)",[rk]);save();$('#lib').textContent=n;toast('Settings saved.')}
+function chgAdmin(){if($('#pc').value!==cfgS('admin_password'))return toast('Current password is wrong.',1);const n=$('#pn').value;if(n.length<6)return toast('New password needs at least 6 characters.',1);run("UPDATE settings SET v=? WHERE k='admin_password'",[n]);toast('Password changed.');$('#pc').value=$('#pn').value=''}
+function saveProfile(){const n=$('#pn1').value.trim();if(!n)return toast('Name cannot be empty.',1);const w=$('#pw').value;if(w&&w.length<6)return toast('Password needs at least 6 characters.',1);
+run('UPDATE students SET full_name=?,email=?,department=? WHERE id=?',[n,$('#pe').value.trim(),$('#pd').value.trim(),me.id]);if(w)run('UPDATE students SET password=? WHERE id=?',[w,me.id]);me.name=n;$('#who').textContent=n+' (student)';toast('Profile saved.')}
+function exportCSV(){const rows=q(`SELECT i.id Issue,b.isbn ISBN,b.title Title,s.student_id StudentID,s.full_name Student,i.issue_date Issued,i.due_date Due,COALESCE(i.return_date,'') Returned,${F} Fine,CASE WHEN i.fine_paid THEN 'Paid' ELSE 'Unpaid' END FineStatus FROM issues i JOIN books b ON b.id=i.book_id JOIN students s ON s.id=i.student_id ${me.role=='student'?'WHERE i.student_id='+me.id:''} ORDER BY i.id`);
+if(!rows.length)return toast('No history to export.',1);const k=Object.keys(rows[0]),c=v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"';
+const csv=[k.join(',')].concat(rows.map(r=>k.map(x=>c(r[x])).join(','))).join('\n'),a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='issue-history.csv';a.click()}
+
+{const _f=V.fines,_m=V.mine;
+V.fines=()=>_f()+`<div class="card"><h2>Payment history</h2>${tbl(q("SELECT p.txn Receipt,s.full_name Student,b.title Book,'₹'||p.amount Amount,p.method Method,p.paid_at Date FROM payments p JOIN students s ON s.id=p.student_id JOIN issues i ON i.id=p.issue_id JOIN books b ON b.id=i.book_id ORDER BY p.id DESC"))}</div>`;
+V.mine=()=>_m()+`<div class="card"><h2>My payments</h2>${tbl(q("SELECT p.txn Receipt,b.title Book,'₹'||p.amount Amount,p.method Method,p.paid_at Date FROM payments p JOIN issues i ON i.id=p.issue_id JOIN books b ON b.id=i.book_id WHERE p.student_id=? ORDER BY p.id DESC",[me.id]))}</div>`}
+
+/* ---------- more student options ---------- */
+const payRows=w=>tbl(q(`SELECT p.txn Receipt,b.title Book,'₹'||p.amount Amount,p.method Method,p.paid_at Date FROM payments p JOIN issues i ON i.id=p.issue_id JOIN books b ON b.id=i.book_id WHERE p.student_id=? ORDER BY p.id DESC`,[me.id]));
+V.sdash=()=>{const c=w=>q('SELECT COUNT(*) c FROM issues i WHERE i.student_id=? AND '+w,[me.id])[0].c,
+held=c('i.return_date IS NULL'),od=c("i.return_date IS NULL AND i.due_date<date('now')"),soon=c("i.return_date IS NULL AND i.due_date BETWEEN date('now') AND date('now','+3 days')"),
+fine=q(`SELECT COALESCE(SUM(${F}),0) t FROM issues i WHERE i.student_id=? AND i.fine_paid=0`,[me.id])[0].t,pr=q("SELECT COUNT(*) c FROM requests WHERE student_id=? AND status='pending'",[me.id])[0].c;
+return `<div class="stats">${[['Books with me',held],['Due in 3 days',soon],['Overdue',od,od>0],['Unpaid fines (₹)',fine,fine>0],['Pending requests',pr]].map(s=>`<div class="stat${s[2]?' w':''}"><b>${s[1]}</b><span>${s[0]}</span></div>`).join('')}</div>
+<div class="card"><h2>Coming due</h2>${tbl(q(`SELECT b.title Book,i.due_date Due,CASE WHEN i.due_date<date('now') THEN 'Overdue' ELSE CAST(julianday(i.due_date)-julianday(date('now')) AS INTEGER)||' days left' END Status FROM issues i JOIN books b ON b.id=i.book_id WHERE i.student_id=? AND i.return_date IS NULL ORDER BY i.due_date`,[me.id]))}</div>`};
+V.mybooks=()=>`<div class="card"><h2>My books</h2><div class="row"><button class="b alt" onclick="exportCSV()">Download my history (CSV)</button></div>${tbl(q(`SELECT i.id Issue,b.title Book,i.issue_date Issued,i.due_date Due,COALESCE(i.return_date,'Not returned') Returned,CASE WHEN i.renewed THEN 'Yes' ELSE 'No' END Renewed FROM issues i JOIN books b ON b.id=i.book_id WHERE i.student_id=? ORDER BY i.id DESC`,[me.id]),r=>r.Returned=='Not returned'&&r.Renewed=='No'?btn('Renew +7 days',`renew(${r.Issue})`):'')}</div>`;
+V.myreq=()=>`<div class="card"><h2>My requests</h2>${tbl(q(`SELECT r.id ID,b.title Book,r.req_date Date,r.status Status FROM requests r JOIN books b ON b.id=r.book_id WHERE r.student_id=? ORDER BY r.id DESC`,[me.id]),r=>r.Status=='pending'?btn('Cancel',`cancelReq(${r.ID})`,'r'):'')}</div>`;
+V.myfines=()=>`<div class="card"><h2>My fines</h2>${tbl(q(`SELECT i.id Issue,b.title Book,i.due_date Due,COALESCE(i.return_date,'Not returned') Returned,${F} "Fine (₹)",CASE WHEN i.fine_paid THEN 'Paid' ELSE 'Unpaid' END Status FROM issues i JOIN books b ON b.id=i.book_id WHERE i.student_id=? AND ${F}>0 ORDER BY i.fine_paid,i.id DESC`,[me.id]),r=>r.Status=='Unpaid'?btn('Pay fine',`openPay(${r.Issue})`):'')}</div><div class="card"><h2>My payments</h2>${payRows()}</div>`;
+function renew(id){const r=q("SELECT due_date<date('now') od,renewed rn,return_date rd FROM issues WHERE id=? AND student_id=?",[id,me.id])[0];if(!r||r.rd)return;
+if(r.od)return toast('Overdue books cannot be renewed. Please return it.',1);if(r.rn)return toast('This book was already renewed once.',1);
+run("UPDATE issues SET due_date=date(due_date,'+7 days'),renewed=1 WHERE id=?",[id]);toast('Renewed for 7 more days.');refresh()}
+function cancelReq(id){run("UPDATE requests SET status='cancelled' WHERE id=? AND student_id=?",[id,me.id]);toast('Request cancelled.');refresh()}
+function showReviews(id){const b=q('SELECT title,author FROM books WHERE id=?',[id])[0],rv=q('SELECT r.rating,r.review,s.full_name n FROM ratings r JOIN students s ON s.id=r.student_id WHERE r.book_id=? ORDER BY r.id DESC',[id]);
+$('#pbox').innerHTML=`<h2>${esc(b.title)}</h2><p class="hint" style="margin:0 0 10px">${esc(b.author)}</p>`+(rv.length?rv.map(x=>`<p style="margin:0 0 10px"><b>${'★'.repeat(x.rating)}</b> ${esc(x.n)}<br>${esc(x.review)}</p>`).join(''):'<p class="empty">No reviews yet.</p>')+'<button class="b" onclick="closePay()">Close</button>';$('#pmodal').style.display='flex'}
+
+/* ---------- theme ---------- */
+function setTheme(t){document.documentElement.dataset.theme=t;try{localStorage.setItem('lib_theme',t)}catch(e){}$('#tm').textContent=t=='dark'?'Light mode':'Dark mode'}
+function toggleTheme(){setTheme(document.documentElement.dataset.theme=='dark'?'light':'dark')}
+setTheme((()=>{try{const s=localStorage.getItem('lib_theme');if(s)return s}catch(e){}return matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'})());
+
+/* ---------- QR ---------- */
+function showQR(c){$('#qrt').textContent=c;$('#qr').innerHTML='';new QRCode($('#qr'),{text:c,width:200,height:200});$('#modal').style.display='flex'}
+async function startScan(){if(typeof jsQR=='undefined')return toast('Scanner failed to load. Check your internet.',1);
+try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}})}catch(e){return toast('Camera blocked. Allow access or type the code.',1)}
+const v=$('#cam');v.srcObject=stream;v.style.display='block';await v.play();scanning=true;const c=document.createElement('canvas'),x=c.getContext('2d',{willReadFrequently:true});
+(function loop(){if(!scanning)return;if(v.videoWidth){c.width=v.videoWidth;c.height=v.videoHeight;x.drawImage(v,0,0);const r=jsQR(x.getImageData(0,0,c.width,c.height).data,c.width,c.height);if(r&&r.data)gotCode(r.data)}requestAnimationFrame(loop)})()}
+function stopScan(){scanning=false;if(stream)stream.getTracks().forEach(t=>t.stop());stream=null;const v=$('#cam');if(v)v.style.display='none'}
+function gotCode(t){t=t.trim();if(t===last)return;last=t;setTimeout(()=>last='',2500);
+if(/^STU/i.test(t)){$('#is').value=t.toUpperCase();toast('Student scanned: '+t)}else{$('#ib').value=t;toast('Book scanned: '+t)}}
+
+/* ---------- SQL ---------- */
+function runSQL(){const o=$('#sqlout'),s=$('#sqlbox').value;try{const res=db.exec(s);if(/^\s*(insert|update|delete|create|drop|alter)/i.test(s))save();
+o.innerHTML=res.length?res.map(r=>tbl(r.values.map(v=>Object.fromEntries(r.columns.map((c,i)=>[c,v[i]]))))).join(''):'<p class="empty">Query ran. No rows returned.</p>'}catch(e){o.innerHTML='<pre class="err">'+esc(e.message)+'</pre>'}}
+
+/* ---------- boot ---------- */
+if(typeof initSqlJs=='undefined'){$('#view').innerHTML='<div class="card"><h2>Could not load the SQL engine</h2><p>This page needs internet to load sql.js from cdnjs. Check your connection and refresh.</p></div>'}
+else initSqlJs({locateFile:f=>'https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/'+f}).then(SQL=>{
+try{const s=localStorage.getItem(KEY);if(s)db=new SQL.Database(Uint8Array.from(atob(s),c=>c.charCodeAt(0)))}catch(e){}
+if(!db)seed(SQL);try{db.run('ALTER TABLE books ADD COLUMN cover TEXT')}catch(e){}try{db.run('ALTER TABLE issues ADD COLUMN renewed INT DEFAULT 0')}catch(e){}db.run("INSERT OR IGNORE INTO settings VALUES('admin_password','admin123')");db.run("CREATE TABLE IF NOT EXISTS payments(id INTEGER PRIMARY KEY AUTOINCREMENT,issue_id INT,student_id INT,amount INT,method TEXT,txn TEXT,paid_at TEXT)");save();$('#lib').textContent=q("SELECT v FROM settings WHERE k='library_name'")[0].v;loginPage()
+}).catch(e=>{$('#view').innerHTML='<div class="card"><h2>Database failed to start</h2><p>'+esc(e.message||e)+'</p></div>'});
+</script></body></html>
